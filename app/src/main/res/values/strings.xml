@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">EADI v2</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="instruction_1">Make sure the surrounding environment is quiet and minimal distractions.</string>
+    <string name="instruction_2">Choose a location that is comfortable for the child, with sufficient but not too bright lighting.</string>
+    <string name="instruction_3">Make sure the camera or device used is working properly and is in photo-taking mode.</string>
+    <string name="instruction_4">Give space for children to express themselves naturally.</string>
+    <string name="instruction_5">Don\'t force your child to smile or pose in a certain way, let them express themselves according to their own personality.</string>
+    <string name="choose_a_picture">Choose a picture</string>
+    <string name="please_upload_a_picture_first">Please upload a picture first!</string>
+    <string name="failed_to_take_picture">Failed to take picture</string>
+    <string name="failed_to_open_camera">Failed to open camera</string>
+    <string name="failed_to_get_permission">Failed to get permission</string>
+    <string name="upload_success">Upload success</string>
+    <string name="upload_failed">Upload Failed</string>
+    <string name="empty_predicted_label">Empty predicted label</string>
+
+</resources>

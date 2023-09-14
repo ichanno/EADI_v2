@@ -86,7 +86,7 @@
                 app:cardElevation="5dp"
                 app:cardUseCompatPadding="true">
 
-                <LinearLayout
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
@@ -100,7 +100,13 @@
                         android:scaleType="centerInside"
                         android:src="@drawable/bg_scan" />
 
-                </LinearLayout>
+                    <ProgressBar
+                        android:id="@+id/progress_bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center" />
+
+                </FrameLayout>
 
             </androidx.cardview.widget.CardView>
 

@@ -7,27 +7,27 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.view.MenuItem
-import android.widget.Toast
 import android.util.Log
+import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bangkit.eadiv2.R
 import com.bangkit.eadiv2.apihelper.ApiClient
-import com.bangkit.eadiv2.apihelper.ApiResponse
 import com.bangkit.eadiv2.databinding.ActivityAddPhotoBinding
 import com.bangkit.eadiv2.ui.result.ResultActivity
 import com.bangkit.eadiv2.utils.reduceImageSize
 import com.bangkit.eadiv2.utils.rotateFile
 import com.bangkit.eadiv2.utils.uriToFile
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 
 class AddPhotoActivity : AppCompatActivity() {
@@ -56,6 +56,7 @@ class AddPhotoActivity : AppCompatActivity() {
         }
 
         setupClickListeners()
+        showLoading(false)
     }
 
     private fun setToolbar() {
@@ -140,15 +141,20 @@ class AddPhotoActivity : AppCompatActivity() {
 
         if (getFile != null) {
             val file = reduceImageSize(getFile as File)
-            val reqImgFile = file.asRequestBody("image/*".toMediaTypeOrNull()) // Specify the media type as "image/jpeg"
+            val reqImgFile =
+                file.asRequestBody("image/*".toMediaTypeOrNull()) // Specify the media type as "image/jpeg"
             val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
                 "image", // Use the correct key as per API documentation
                 file.name,
                 reqImgFile
             )
 
+            showLoading(true)
+
             apiService.uploadImage(imageMultipart).enqueue(object : Callback<String> {
                 override fun onResponse(call: Call<String>, response: Response<String>) {
+                    showLoading(false)
+
                     if (response.isSuccessful) {
                         val predictedLabel = response.body()
                         Log.d("UploadImage", "Predicted label: $predictedLabel")
@@ -169,12 +175,14 @@ class AddPhotoActivity : AppCompatActivity() {
                     } else {
                         val errorBody = response.errorBody()?.string()
                         Log.e("UploadImage", "Upload failed. Error: ${response.code()}, $errorBody")
+                        showLoading(false)
                         showToast(getString(R.string.upload_failed))
                     }
                 }
 
                 override fun onFailure(call: Call<String>, t: Throwable) {
                     Log.e("UploadImage", "Upload failed. Error: ${t.message}")
+                    showLoading(false)
                     showToast(getString(R.string.upload_failed))
                 }
             })
@@ -199,6 +207,15 @@ class AddPhotoActivity : AppCompatActivity() {
                 ).show()
                 finish()
             }
+        }
+    }
+
+    private fun showLoading(state: Boolean) {
+        val progressBar = binding.progressBar
+        if (state) {
+            progressBar.visibility = View.VISIBLE
+        } else {
+            progressBar.visibility = View.INVISIBLE
         }
     }
 
